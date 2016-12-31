@@ -3,9 +3,12 @@ sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install tmux build-essential gcc g++ make binutils -y
 sudo apt-get install software-properties-common -y
 
-CUDA_FILE = "cuda-repo-ubuntu1604_8.0.44-1_amd64.deb" # References to Nvida .deb repo
-CONDA_FILE = "Anaconda2-4.2.0-Linux-x86_64.sh" # installer-file for conda
-CUDDN_FILE = "cudnn.tgz" # CUDNN actual tar.gz
+# References to Nvida .deb repo
+export CUDA_FILE="cuda-repo-ubuntu1604_8.0.44-1_amd64.deb"
+# installer-file for conda
+export CONDA_FILE="Anaconda2-4.2.0-Linux-x86_64.sh"
+# CUDNN actual tar.gz
+export CUDDN_FILE="cudnn.tgz"
 
 
 mkdir downloads
@@ -22,12 +25,13 @@ nvidia-smi
 if [ ! -f ${CUDDN_FILE} ]; then
     wget http://platform.ai/files/${CUDDN_FILE}
 fi
+
 tar -zxf ${CUDDN_FILE}
 cd cuda
 sudo cp lib64/* /usr/local/cuda/lib64/
 sudo cp include/* /usr/local/cuda/include/
 
-if [ ${NO_CONDA} != "" ]; then
+if [ -z ${CONDA+x} ]; then
 
     if [ ! -f ${CONDA_FILE} ]; then
         wget https://repo.continuum.io/archive/${CONDA_FILE}
@@ -52,3 +56,5 @@ if [ ${NO_CONDA} != "" ]; then
         "backend": "theano"
     }' > ~/.keras/keras.json
 fi
+
+echo 'export PATH="/usr/local/cuda/bin:$PATH"' >> ~/.bashrc
