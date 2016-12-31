@@ -19,29 +19,6 @@ sudo apt-get install cuda -y
 sudo modprobe nvidia
 nvidia-smi
 
-if [ ! -f ${CONDA_FILE} ]; then
-    wget https://repo.continuum.io/archive/${CONDA_FILE}
-fi
-bash ${CONDA_FILE} -b
-echo 'export PATH="/home/${MY_LINUX_USER}/anaconda2/bin:$PATH"' >> ~/.bashrc
-export PATH="/home/${MY_LINUX_USER}/anaconda2/bin:$PATH"
-conda install -y bcolz
-conda upgrade -y --all
-
-pip install theano
-echo "[global]
-device = gpu
-floatX = float32" > ~/.theanorc
-
-pip install keras
-mkdir ~/.keras
-echo '{
-    "image_dim_ordering": "th",
-    "epsilon": 1e-07,
-    "floatx": "float32",
-    "backend": "theano"
-}' > ~/.keras/keras.json
-
 if [ ! -f ${CUDDN_FILE} ]; then
     wget http://platform.ai/files/${CUDDN_FILE}
 fi
@@ -49,3 +26,29 @@ tar -zxf ${CUDDN_FILE}
 cd cuda
 sudo cp lib64/* /usr/local/cuda/lib64/
 sudo cp include/* /usr/local/cuda/include/
+
+if [ ${NO_CONDA} != "" ]; then
+
+    if [ ! -f ${CONDA_FILE} ]; then
+        wget https://repo.continuum.io/archive/${CONDA_FILE}
+    fi
+    bash ${CONDA_FILE} -b
+    echo 'export PATH="/home/${MY_LINUX_USER}/anaconda2/bin:$PATH"' >> ~/.bashrc
+    export PATH="/home/${MY_LINUX_USER}/anaconda2/bin:$PATH"
+    conda install -y bcolz
+    conda upgrade -y --all
+
+    pip install theano
+    echo "[global]
+    device = gpu
+    floatX = float32" > ~/.theanorc
+
+    pip install keras
+    mkdir ~/.keras
+    echo '{
+        "image_dim_ordering": "th",
+        "epsilon": 1e-07,
+        "floatx": "float32",
+        "backend": "theano"
+    }' > ~/.keras/keras.json
+fi
