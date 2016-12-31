@@ -15,17 +15,17 @@ nvidia-smi
 
 wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
 bash Anaconda2-4.2.0-Linux-x86_64.sh -b
-echo 'export PATH="/home/ubuntu/anaconda2/bin:$PATH"' >> ~/.bashrc
-export PATH="/home/ubuntu/anaconda2/bin:$PATH"
-./home/ubuntu/anaconda2/bin/conda install -y bcolz
-./home/ubuntu/anaconda2/bin/conda upgrade -y --all
+echo 'export PATH="/home/${MY_LINUX_USER}/anaconda2/bin:$PATH"' >> ~/.bashrc
+export PATH="/home/${MY_LINUX_USER}/anaconda2/bin:$PATH"
+conda install -y bcolz
+conda upgrade -y --all
 
-./home/ubuntu/anaconda2/bin/pip install theano
-echo "[global]"
+pip install theano
+echo "[global]
 device = gpu
 floatX = float32" > ~/.theanorc
 
-./home/ubuntu/anaconda2/bin/pip install keras
+pip install keras
 mkdir ~/.keras
 echo '{
     "image_dim_ordering": "th",
